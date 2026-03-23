@@ -38,6 +38,7 @@ class EntraGroupsConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         """Initialize the config flow."""
         self._credentials: dict[str, Any] = {}
+        self._reconfigure_entry: ConfigEntry | None = None
 
     @staticmethod
     @callback
@@ -97,6 +98,7 @@ class EntraGroupsConfigFlow(ConfigFlow, domain=DOMAIN):
         """Allow credentials to be reconfigured."""
         errors: dict[str, str] = {}
         entry = self._get_reconfigure_entry()
+        self._reconfigure_entry = entry
 
         if user_input is not None:
             client = self._build_client(user_input)
@@ -105,14 +107,51 @@ class EntraGroupsConfigFlow(ConfigFlow, domain=DOMAIN):
             except Exception:
                 errors["base"] = "cannot_connect"
             else:
-                return self.async_update_reload_and_abort(
-                    entry,
-                    data_updates=user_input,
-                )
+                self._credentials = user_input
+                return await self.async_step_reconfigure_groups()
 
         return self.async_show_form(
             step_id="reconfigure",
             data_schema=self._credentials_schema(entry.data),
+            errors=errors,
+        )
+
+    async def async_step_reconfigure_groups(
+        self, user_input: dict[str, Any] | None = None
+    ):
+        """Update managed groups and polling during reconfigure."""
+        errors: dict[str, str] = {}
+        entry = self._reconfigure_entry or self._get_reconfigure_entry()
+
+        if user_input is not None:
+            client = self._build_client(self._credentials)
+            try:
+                groups = await client.async_resolve_groups(
+                    _parse_group_inputs(user_input[CONF_GROUP_INPUTS])
+                )
+            except Exception:
+                errors["base"] = "invalid_groups"
+            else:
+                return self.async_update_reload_and_abort(
+                    entry,
+                    data_updates=self._credentials,
+                    options_updates={
+                        CONF_GROUPS: [group.as_dict() for group in groups],
+                        CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
+                    },
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure_groups",
+            data_schema=_groups_schema(
+                {
+                    CONF_GROUP_INPUTS: _stringify_groups(entry.options.get(CONF_GROUPS, [])),
+                    CONF_SCAN_INTERVAL: entry.options.get(
+                        CONF_SCAN_INTERVAL,
+                        DEFAULT_SCAN_INTERVAL_MINUTES,
+                    ),
+                }
+            ),
             errors=errors,
         )
 
@@ -205,7 +244,7 @@ def _groups_schema(data: Mapping[str, Any] | None = None) -> vol.Schema:
             vol.Required(
                 CONF_GROUP_INPUTS,
                 default=data.get(CONF_GROUP_INPUTS, ""),
-            ): TextSelector(TextSelectorConfig(multiline=True)),
+            ): TextSelector(TextSelectorConfig()),
             vol.Required(
                 CONF_SCAN_INTERVAL,
                 default=int(data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_MINUTES)),
@@ -233,4 +272,4 @@ def _parse_group_inputs(value: str) -> list[str]:
 
 def _stringify_groups(groups: list[dict[str, Any]]) -> str:
     """Convert stored groups into editable multiline text."""
-    return "\n".join(group.get("id", "") for group in groups)
+    return ", ".join(group.get("id", "") for group in groups)

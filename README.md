@@ -49,7 +49,7 @@ The initial setup flow asks for:
 - Tenant ID or tenant name
 - Application (client) ID
 - Client secret
-- One or more group identifiers, entered as IDs or exact display names
+- One or more group identifiers, entered as comma-separated IDs or exact display names
 - Sync interval in minutes
 
 After setup, use the integration options to update the managed group list or polling interval.

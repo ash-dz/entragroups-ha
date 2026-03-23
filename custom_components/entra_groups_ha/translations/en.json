@@ -13,7 +13,7 @@
       },
       "groups": {
         "title": "Managed groups",
-        "description": "Enter one group ID or exact display name per line.",
+        "description": "Enter one or more group IDs or exact display names, separated by commas.",
         "data": {
           "group_inputs": "Groups",
           "scan_interval": "Sync interval"
@@ -27,6 +27,14 @@
           "client_id": "Application (client) ID",
           "client_secret": "Client secret"
         }
+      },
+      "reconfigure_groups": {
+        "title": "Managed groups",
+        "description": "Update the managed groups and polling interval. Enter group IDs or exact display names separated by commas.",
+        "data": {
+          "group_inputs": "Groups",
+          "scan_interval": "Sync interval"
+        }
       }
     },
     "error": {
@@ -38,7 +46,7 @@
     "step": {
       "init": {
         "title": "Managed groups",
-        "description": "Update the managed groups and polling interval.",
+        "description": "Update the managed groups and polling interval. Enter group IDs or exact display names separated by commas.",
         "data": {
           "group_inputs": "Groups",
           "scan_interval": "Sync interval"
