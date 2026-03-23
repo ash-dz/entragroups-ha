@@ -1,0 +1,54 @@
+add_member:
+  name: Add member
+  description: Add a user, device, or directory object to a managed Entra group.
+  fields:
+    group:
+      required: true
+      selector:
+        text:
+    member:
+      required: true
+      selector:
+        text:
+    member_type:
+      required: false
+      default: auto
+      selector:
+        select:
+          options:
+            - auto
+            - user
+            - device
+            - directory_object
+
+remove_member:
+  name: Remove member
+  description: Remove a user, device, or directory object from a managed Entra group.
+  fields:
+    group:
+      required: true
+      selector:
+        text:
+    member:
+      required: true
+      selector:
+        text:
+    member_type:
+      required: false
+      default: auto
+      selector:
+        select:
+          options:
+            - auto
+            - user
+            - device
+            - directory_object
+
+refresh:
+  name: Refresh groups
+  description: Refresh all managed groups immediately, or a single managed group.
+  fields:
+    group:
+      required: false
+      selector:
+        text:

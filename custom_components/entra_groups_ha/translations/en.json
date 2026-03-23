@@ -1,0 +1,59 @@
+{
+  "config": {
+    "flow_title": "Entra Groups HA",
+    "step": {
+      "user": {
+        "title": "Microsoft Entra application",
+        "description": "Enter the Microsoft Entra tenant and application credentials.",
+        "data": {
+          "tenant_id": "Tenant ID or tenant name",
+          "client_id": "Application (client) ID",
+          "client_secret": "Client secret"
+        }
+      },
+      "groups": {
+        "title": "Managed groups",
+        "description": "Enter one group ID or exact display name per line.",
+        "data": {
+          "group_inputs": "Groups",
+          "scan_interval": "Sync interval"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure credentials",
+        "description": "Update the Microsoft Entra application credentials.",
+        "data": {
+          "tenant_id": "Tenant ID or tenant name",
+          "client_id": "Application (client) ID",
+          "client_secret": "Client secret"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to Microsoft Graph with the supplied credentials.",
+      "invalid_groups": "One or more groups could not be resolved."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Managed groups",
+        "description": "Update the managed groups and polling interval.",
+        "data": {
+          "group_inputs": "Groups",
+          "scan_interval": "Sync interval"
+        }
+      }
+    },
+    "error": {
+      "invalid_groups": "One or more groups could not be resolved."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "managed_group_members": {
+        "name": "Members"
+      }
+    }
+  }
+}
