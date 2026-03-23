@@ -3,12 +3,12 @@
   "name": "Entra Groups HA",
   "codeowners": [],
   "config_flow": true,
-  "documentation": "https://github.com/dezylvaa/entragroups-ha",
+  "documentation": "https://github.com/ash-dz/entragroups-ha",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/dezylvaa/entragroups-ha/issues",
+  "issue_tracker": "https://github.com/ash-dz/entragroups-ha/issues",
   "loggers": ["custom_components.entra_groups_ha"],
   "requirements": [],
   "single_config_entry": true,
-  "version": "0.1.0"
+  "version": "0.1.1"
 }

@@ -15,6 +15,8 @@ It supports:
 
 This repository is structured so it can be added to HACS as a custom integration repository.
 
+HACS update detection is expected to use GitHub releases. The integration version is declared in [manifest.json](custom_components/entra_groups_ha/manifest.json), and releases should use matching version tags such as `v0.1.1`.
+
 ## Installation
 
 ### HACS
@@ -103,3 +105,12 @@ Optional fields:
 - User resolution prefers exact UPN or mail matches.
 - Device resolution uses exact display name or device ID matches.
 - Nested group expansion is not performed; the sensor reflects direct group members returned by Microsoft Graph.
+
+## Releasing
+
+1. Update the version in `custom_components/entra_groups_ha/manifest.json`.
+2. Commit and push the change.
+3. Create and push a matching tag such as `v0.1.1`.
+4. GitHub Actions will publish a GitHub release automatically.
+
+Using tagged GitHub releases allows HACS to detect and offer updates cleanly.
